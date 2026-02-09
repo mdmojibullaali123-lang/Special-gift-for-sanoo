@@ -1,218 +1,240 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <title>Special Gift ❤️</title>
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',cursive}
+
+/* ================= BACKGROUND ================= */
 body{
-  margin:0;
-  font-family:'Segoe UI',cursive;
-  background:linear-gradient(135deg,#ff9ecf,#ff6fa5);
-  overflow:hidden;
-  text-align:center;
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+background: radial-gradient(circle at 20% 20%, #ff8fb1, #ff4d88);
 }
 
-/* glitter box */
+/* moving glitter hearts */
+body::before{
+content:"";
+position:fixed;
+width:200%;
+height:200%;
+background:url("https://i.imgur.com/Y5bYQ8B.png");
+animation:move 30s linear infinite;
+opacity:.25;
+}
+@keyframes move{
+from{transform:translate(0,0)}
+to{transform:translate(-50%,-50%)}
+}
+
+/* ================= CENTER BOX ================= */
 .card{
-  background:linear-gradient(45deg,#fff,#ffe6f2,#fff);
-  box-shadow:0 0 30px rgba(255,255,255,.8);
-  border-radius:25px;
-  padding:25px;
-  width:90%;
-  max-width:360px;
-  margin:80px auto;
-  animation:glow 2s infinite alternate;
+background:rgba(255,255,255,.85);
+backdrop-filter:blur(10px);
+padding:30px;
+border-radius:25px;
+text-align:center;
+box-shadow:0 0 35px rgba(255,255,255,.9);
+width:90%;
+max-width:360px;
+z-index:10;
 }
 
-@keyframes glow{
-  from{box-shadow:0 0 20px pink}
-  to{box-shadow:0 0 45px white}
+/* ================= TEXT ================= */
+h1{
+color:#ff2f70;
+font-size:22px;
+margin-bottom:15px;
 }
 
-h1,h2,h3{
-  color:#ff2e7a;
+.btn{
+background:#ff2f70;
+color:#fff;
+border:none;
+padding:10px 20px;
+margin:8px;
+border-radius:20px;
+font-size:16px;
+cursor:pointer;
 }
 
-button{
-  padding:12px 20px;
-  border:none;
-  border-radius:25px;
-  background:#ff2e7a;
-  color:white;
-  font-size:16px;
-  margin:10px;
-}
-
+/* ================= PHOTO ================= */
 img{
-  max-width:100%;
-  border-radius:20px;
+width:100%;
+border-radius:20px;
+box-shadow:0 0 25px pink;
 }
 
-/* emoji rain */
+/* ================= EMOJI RAIN ================= */
 .emoji{
-  position:fixed;
-  top:-50px;
-  font-size:22px;
-  animation:fall 6s linear infinite;
+position:fixed;
+font-size:22px;
+animation:fall linear forwards;
+pointer-events:none;
 }
 @keyframes fall{
-  to{transform:translateY(110vh);}
+to{transform:translateY(110vh);opacity:0}
+}
+
+/* ================= POPUP TEXT ================= */
+.popup{
+position:fixed;
+top:15%;
+left:50%;
+transform:translateX(-50%);
+color:white;
+font-size:18px;
+background:rgba(0,0,0,.4);
+padding:8px 16px;
+border-radius:15px;
+}
+
+/* fireworks */
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:1;
 }
 </style>
 </head>
 
 <body>
 
-<div id="app"></div>
+<canvas id="fire"></canvas>
 
 <audio id="music" src="love.mp3"></audio>
 
+<div id="app"></div>
+
 <script>
 
-const app=document.getElementById("app")
+/* ================= PASSWORD ================= */
+let pass = prompt("Enter Password ❤️");
+if(pass!=="sanoali"){
+document.body.innerHTML="Wrong password ❌";
+throw "stop";
+}
 
-/* emoji rain */
+/* ================= EMOJI RAIN ================= */
+let emojis=["😍","😘","🥰","💗","❤️","💞","💘","💕"];
 setInterval(()=>{
-  const e=document.createElement("div")
-  e.className="emoji"
-  e.innerHTML="💖"
-  e.style.left=Math.random()*100+"%"
-  document.body.appendChild(e)
-  setTimeout(()=>e.remove(),6000)
-},300)
+let e=document.createElement("div");
+e.className="emoji";
+e.innerText=emojis[Math.floor(Math.random()*emojis.length)];
+e.style.left=Math.random()*100+"%";
+e.style.animationDuration=(3+Math.random()*3)+"s";
+document.body.appendChild(e);
+setTimeout(()=>e.remove(),6000);
+},150);
 
+/* ================= POPUP ================= */
+function showPopup(text){
+let p=document.createElement("div");
+p.className="popup";
+p.innerText=text;
+document.body.appendChild(p);
+setTimeout(()=>p.remove(),3000);
+}
 
-/* ===================== PAGE 1 ===================== */
+/* ================= FIREWORKS ================= */
+let c=document.getElementById("fire");
+let ctx=c.getContext("2d");
+c.width=innerWidth;
+c.height=innerHeight;
 
-function home(){
+function firework(){
+for(let i=0;i<40;i++){
+ctx.fillStyle="hsl("+Math.random()*360+",100%,60%)";
+ctx.beginPath();
+ctx.arc(Math.random()*c.width,Math.random()*c.height,3,0,6);
+ctx.fill();
+}
+}
+setInterval(firework,400);
+
+/* ================= SLIDES ================= */
+
+function slide1(){
 app.innerHTML=`
 <div class="card">
-<h2>Will You Be My Valentine? 💘</h2>
+<h1>Will You Be My Valentine? 💖</h1>
+<button class="btn" onclick="slide2()">YES BABY 😍</button><br>
+<button id="no" class="btn">NO 😜</button>
+</div>
+`;
 
-<button onclick="yes()">YES BABY 😍</button><br>
-<button id="noBtn" onclick="noFun()">NO 😜</button>
-</div>`
+let msgs=[
+"yes nhi karogi toh mai ro dunga 🤧",
+"pls maan jao na baby 🥺"
+];
+let i=0;
+
+let no=document.getElementById("no");
+no.onclick=()=>{
+showPopup(msgs[i%2]);
+i++;
+};
+no.onmouseover=()=>{
+no.style.position="absolute";
+no.style.left=Math.random()*70+"%";
+no.style.top=Math.random()*70+"%";
+};
 }
 
-let noCount=0
-
-function noFun(){
-const btn=document.getElementById("noBtn")
-
-/* bhaagne wala */
-btn.style.position="absolute"
-btn.style.left=Math.random()*70+"%"
-btn.style.top=Math.random()*70+"%"
-
-noCount++
-
-if(noCount%2==1)
-alert("yes nhi karogi toh mai ro dunga 🤧")
-else
-alert("pls maan jao na baby 🥺")
-}
-
-function yes(){
-firePage()
-}
-
-
-/* ===================== FIRE PAGE ===================== */
-
-function firePage(){
+function slide2(){
 app.innerHTML=`
 <div class="card">
-<h2>Mujhe toh pta tha aap haa kr doge 🤭😁</h2>
-<h3>Aap toh meri jaanu ho 😘😘</h3>
-<button onclick="gift()">Special Gift For My Sanooo 🎁</button>
-<button onclick="home()">⬅ Back</button>
-</div>`
-
-fireworks()
+<h1>Mujhe toh pta tha aap haa kr doge 🤭😁<br>Aap toh meri jaanu ho 😘😘</h1>
+<button class="btn" onclick="gift()">Special gift for my sanooo 🎁</button>
+</div>
+`;
 }
-
-
-/* ===================== PASSWORD ===================== */
 
 function gift(){
-const pass=prompt("Enter password")
-
-if(pass==="sanoali"){
-menu()
-}else{
-alert("Wrong password ❌")
-}
-}
-
-
-/* ===================== MENU ===================== */
-
-function menu(){
 app.innerHTML=`
 <div class="card">
-<h2>Choose Your Gift ❤️</h2>
-<button onclick="shayari()">Shayari 🌹</button>
-<button onclick="dream()">Dream 🌈</button>
-<button onclick="firePage()">⬅ Back</button>
-</div>`
+<button class="btn" onclick="shayari()">Shayari ❤️</button>
+<button class="btn" onclick="dream()">Dream 💕</button>
+<button class="btn" onclick="slide1()">⬅ Back</button>
+</div>
+`;
 }
-
-
-/* ===================== SHAYARI ===================== */
 
 function shayari(){
-document.getElementById("music").play()
-
+music.play();
 app.innerHTML=`
 <div class="card">
-
-<img src="photo.png">
-
-<h3>
+<h1>
 Meri kya majal me tumhe chodh dunga<br><br>
 Usse pehle hee me apna jism chodh dunga<br><br>
 Tum meri zindagi ka aayena ho<br><br>
 Tumhe bhala kese tod dunga<br><br>
 Tum mere khwabon ki tabeer ho<br><br>
 Me tumhe kese tanha chodh dunga
-</h3>
-
-<button onclick="menu()">⬅ Back</button>
-</div>`
+</h1>
+<button class="btn" onclick="gift()">⬅ Back</button>
+</div>
+`;
 }
-
-
-/* ===================== DREAM ===================== */
 
 function dream(){
 app.innerHTML=`
 <div class="card">
-<h2>My Dream With You 💖</h2>
 <img src="photo.png">
-<button onclick="menu()">⬅ Back</button>
-</div>`
-fireworks()
+<button class="btn" onclick="gift()">⬅ Back</button>
+</div>
+`;
 }
 
-
-/* ===================== FIREWORK ===================== */
-
-function fireworks(){
-for(let i=0;i<30;i++){
-let f=document.createElement("div")
-f.innerHTML="✨"
-f.style.position="fixed"
-f.style.left=Math.random()*100+"%"
-f.style.top=Math.random()*100+"%"
-f.style.fontSize="24px"
-document.body.appendChild(f)
-setTimeout(()=>f.remove(),1000)
-}
-}
-
-home()
+slide1();
 
 </script>
+
 </body>
 </html>
