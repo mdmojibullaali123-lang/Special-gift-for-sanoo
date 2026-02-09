@@ -5,47 +5,45 @@
 <title>Special Gift ❤️</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',cursive}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',cursive;
+}
 
-/* ================= BACKGROUND ================= */
+/* ===== Animated romantic background (NO IMAGE) ===== */
 body{
 height:100vh;
 overflow:hidden;
 display:flex;
 justify-content:center;
 align-items:center;
-background: radial-gradient(circle at 20% 20%, #ff8fb1, #ff4d88);
+
+background:linear-gradient(-45deg,#ff8fb1,#ff5c8a,#ff9cc3,#ff6fa3);
+background-size:400% 400%;
+animation:bgMove 10s ease infinite;
 }
 
-/* moving glitter hearts */
-body::before{
-content:"";
-position:fixed;
-width:200%;
-height:200%;
-background:url("https://i.imgur.com/Y5bYQ8B.png");
-animation:move 30s linear infinite;
-opacity:.25;
-}
-@keyframes move{
-from{transform:translate(0,0)}
-to{transform:translate(-50%,-50%)}
+@keyframes bgMove{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
 }
 
-/* ================= CENTER BOX ================= */
+/* ===== Card ===== */
 .card{
-background:rgba(255,255,255,.85);
-backdrop-filter:blur(10px);
+background:rgba(255,255,255,.9);
 padding:30px;
 border-radius:25px;
 text-align:center;
-box-shadow:0 0 35px rgba(255,255,255,.9);
+box-shadow:0 0 30px rgba(255,255,255,.9);
 width:90%;
 max-width:360px;
 z-index:10;
 }
 
-/* ================= TEXT ================= */
+/* ===== Text ===== */
 h1{
 color:#ff2f70;
 font-size:22px;
@@ -54,7 +52,7 @@ margin-bottom:15px;
 
 .btn{
 background:#ff2f70;
-color:#fff;
+color:white;
 border:none;
 padding:10px 20px;
 margin:8px;
@@ -63,25 +61,23 @@ font-size:16px;
 cursor:pointer;
 }
 
-/* ================= PHOTO ================= */
-img{
-width:100%;
-border-radius:20px;
-box-shadow:0 0 25px pink;
-}
-
-/* ================= EMOJI RAIN ================= */
+/* ===== Emoji rain ===== */
 .emoji{
 position:fixed;
 font-size:22px;
 animation:fall linear forwards;
 pointer-events:none;
-}
-@keyframes fall{
-to{transform:translateY(110vh);opacity:0}
+z-index:1;
 }
 
-/* ================= POPUP TEXT ================= */
+@keyframes fall{
+to{
+transform:translateY(110vh);
+opacity:0;
+}
+}
+
+/* ===== popup text ===== */
 .popup{
 position:fixed;
 top:15%;
@@ -89,17 +85,24 @@ left:50%;
 transform:translateX(-50%);
 color:white;
 font-size:18px;
-background:rgba(0,0,0,.4);
+background:rgba(0,0,0,.5);
 padding:8px 16px;
 border-radius:15px;
+z-index:999;
 }
 
-/* fireworks */
+img{
+width:100%;
+border-radius:20px;
+box-shadow:0 0 25px pink;
+}
+
 canvas{
 position:fixed;
 top:0;
 left:0;
-z-index:1;
+pointer-events:none; /* IMPORTANT FIX */
+z-index:0;
 }
 </style>
 </head>
@@ -114,15 +117,16 @@ z-index:1;
 
 <script>
 
-/* ================= PASSWORD ================= */
-let pass = prompt("Enter Password ❤️");
+/* ===== Password ===== */
+let pass=prompt("Enter Password ❤️");
 if(pass!=="sanoali"){
 document.body.innerHTML="Wrong password ❌";
 throw "stop";
 }
 
-/* ================= EMOJI RAIN ================= */
+/* ===== Emoji rain ===== */
 let emojis=["😍","😘","🥰","💗","❤️","💞","💘","💕"];
+
 setInterval(()=>{
 let e=document.createElement("div");
 e.className="emoji";
@@ -131,9 +135,9 @@ e.style.left=Math.random()*100+"%";
 e.style.animationDuration=(3+Math.random()*3)+"s";
 document.body.appendChild(e);
 setTimeout(()=>e.remove(),6000);
-},150);
+},120);
 
-/* ================= POPUP ================= */
+/* ===== Popup ===== */
 function showPopup(text){
 let p=document.createElement("div");
 p.className="popup";
@@ -142,23 +146,22 @@ document.body.appendChild(p);
 setTimeout(()=>p.remove(),3000);
 }
 
-/* ================= FIREWORKS ================= */
+/* ===== Fireworks ===== */
 let c=document.getElementById("fire");
 let ctx=c.getContext("2d");
 c.width=innerWidth;
 c.height=innerHeight;
 
-function firework(){
-for(let i=0;i<40;i++){
+setInterval(()=>{
+for(let i=0;i<30;i++){
 ctx.fillStyle="hsl("+Math.random()*360+",100%,60%)";
 ctx.beginPath();
 ctx.arc(Math.random()*c.width,Math.random()*c.height,3,0,6);
 ctx.fill();
 }
-}
-setInterval(firework,400);
+},500);
 
-/* ================= SLIDES ================= */
+/* ===== Slides ===== */
 
 function slide1(){
 app.innerHTML=`
@@ -173,13 +176,15 @@ let msgs=[
 "yes nhi karogi toh mai ro dunga 🤧",
 "pls maan jao na baby 🥺"
 ];
-let i=0;
 
+let i=0;
 let no=document.getElementById("no");
+
 no.onclick=()=>{
 showPopup(msgs[i%2]);
 i++;
 };
+
 no.onmouseover=()=>{
 no.style.position="absolute";
 no.style.left=Math.random()*70+"%";
@@ -235,6 +240,5 @@ app.innerHTML=`
 slide1();
 
 </script>
-
 </body>
 </html>
